@@ -4,8 +4,9 @@ function Todos() {
     const [text, setText] = useState('')
     const [todos, setTodos] = useState([])
 
-    // Calculate items left
+    // Calculations for footer
     const itemsLeft = todos.filter((todo) => !todo.completed).length
+    const completedCount = todos.filter((todo) => todo.completed).length
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -28,6 +29,10 @@ function Todos() {
 
     function handleDelete(id) {
         setTodos(todos.filter((todo) => todo.id !== id))
+    }
+
+    function handleClearCompleted() {
+        setTodos(todos.filter((todo) => !todo.completed))
     }
 
   return (
@@ -120,10 +125,19 @@ function Todos() {
                             Completed
                         </button>
                     </li>
-                    <button type="button" className="cursor-pointer justify-self-end hover:underline">
-                        Clear completed
-                    </button>
                 </ul>
+
+                <div className="justify-self-end">
+                    {completedCount > 0 && (
+                        <button 
+                            type="button" 
+                            onClick={handleClearCompleted}
+                            className="cursor-pointer hover:underline"
+                        >
+                            Clear completed
+                        </button>
+                    )}
+                </div>
             </footer>
             </>
         )}
