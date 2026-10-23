@@ -4,21 +4,24 @@ function Todos() {
     const [text, setText] = useState('')
     const [todos, setTodos] = useState([])
 
+    // Calculate items left
+    const itemsLeft = todos.filter((todo) => !todo.completed).length
+
     function handleSubmit(e) {
         e.preventDefault()
         const trimmed = text.trim()
         if (trimmed === '') {
-        return
+            return
         }
         const newTodo = { id: crypto.randomUUID(), text: trimmed, completed: false }
         setTodos([...todos, newTodo])
         setText('')
-     }
+    }
  
     function handleToggle(id) {
         setTodos(
-        todos.map((todo) =>
-            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            todos.map((todo) =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
             )
         )
     }
@@ -30,7 +33,7 @@ function Todos() {
   return (
     <section className="mx-auto max-w-[550px]">
         <h1 className="text-center text-[80px] font-extralight text-[#b83f45]">
-          todos
+            todos
         </h1>
 
         <div className="relative bg-white shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]">
@@ -43,8 +46,8 @@ function Todos() {
                 />
             </form>
 
-                {todos.length > 0 && (
-                  <>
+            {todos.length > 0 && (
+                <>
             <main className="relative border-t border-[#e6e6e6]">
             <input id="toggle-all" type="checkbox" className="peer sr-only" />
                 <label
@@ -60,7 +63,6 @@ function Todos() {
                         key={todo.id}
                         className="group relative flex items-center border-b border-[#ededed] text-2xl"
                     >
-                        
                         <input
                             type="checkbox"
                             checked={todo.completed}
@@ -85,13 +87,12 @@ function Todos() {
                         </button>
                     </li>
                 ))}
-                   
                 </ul>
             </main>
 
             <footer className="grid h-10 grid-cols-3 items-center border-t border-[#e6e6e6] px-[15px] text-[15px]">
                 <span>
-                    <strong className="font-light">1</strong> item left
+                    <strong className="font-light">{itemsLeft}</strong> {itemsLeft === 1 ? 'item' : 'items'} left
                 </span>
 
                 <ul className="flex justify-center gap-1">
