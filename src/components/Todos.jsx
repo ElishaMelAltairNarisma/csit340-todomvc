@@ -4,9 +4,12 @@ function Todos() {
     const [text, setText] = useState('')
     const [todos, setTodos] = useState([])
 
-    // Calculations for footer
+    // Calculations for footer & toggle all
     const itemsLeft = todos.filter((todo) => !todo.completed).length
     const completedCount = todos.filter((todo) => todo.completed).length
+    
+    // A todo list is "all completed" if there's at least one todo and every todo is completed
+    const allCompleted = todos.length > 0 && todos.every((todo) => todo.completed)
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -25,6 +28,12 @@ function Todos() {
                 todo.id === id ? { ...todo, completed: !todo.completed } : todo
             )
         )
+    }
+
+    function handleToggleAll() {
+        // If every todo is completed, make all not completed. Otherwise, make all completed.
+        const targetState = !allCompleted
+        setTodos(todos.map((todo) => ({ ...todo, completed: targetState })))
     }
 
     function handleDelete(id) {
@@ -54,10 +63,18 @@ function Todos() {
             {todos.length > 0 && (
                 <>
             <main className="relative border-t border-[#e6e6e6]">
-            <input id="toggle-all" type="checkbox" className="peer sr-only" />
+                <input 
+                    id="toggle-all" 
+                    type="checkbox" 
+                    checked={allCompleted}
+                    onChange={handleToggleAll}
+                    className="peer sr-only" 
+                />
                 <label
                     htmlFor="toggle-all"
-                    className="absolute -top-[66px] left-0 flex h-[65px] w-[60px] cursor-pointer items-center justify-center text-[22px] text-[#949494] peer-checked:text-[#484848]"
+                    className={`absolute -top-[66px] left-0 flex h-[65px] w-[60px] cursor-pointer items-center justify-center text-[22px] ${
+                        allCompleted ? 'text-[#484848]' : 'text-[#949494]'
+                    }`}
                 >
                     <span className="rotate-90">❯</span>
                 </label>
